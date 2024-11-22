@@ -1,6 +1,6 @@
 package modell;
 
-public class Kunde extends Konto {
+public class Kunde {
     private String vorname;
     private String nachname;
     private String geburtsdatum;

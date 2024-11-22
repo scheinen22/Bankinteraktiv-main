@@ -13,13 +13,12 @@ public class Bank {
     private String bankname;
     private final Scanner scanner = new Scanner(System.in);
     private final List<Konto> konten;
-    public static View view; 
+    public static final View view = new View();
 
     //Konstruktor
     //Standard Konstruktor
     public Bank() {
         this.konten = new ArrayList<>();
-        this.view = new View();
     }
     //Spezial Konstruktor
     public Bank(int blz, String bankname) {
@@ -85,50 +84,6 @@ public class Bank {
         }
         return null;
     }
-    
-    /*public void interaktivesMenu() {
-        boolean running = true;
-        String gebenKonto = "Geben Sie Ihre Kontonummer ein: ";
-        String ungueltigKonto = "Ungültige Kontonummer";
-        String ungueltigBetrag = "Ungültiger Betrag";
-
-        while (running) {
-        	view.ausgabe("\n--- Bank Menü ---");
-        	view.ausgabe("1. Überweisung");
-        	view.ausgabe("2. Einzahlung");
-        	view.ausgabe("3. Abheben");
-        	view.ausgabe("4. Transaktionen anzeigen");
-        	view.ausgabe("5. Kontoinformationen anzeigen");
-        	view.ausgabe("6. Beenden");
-        	view.ausgabe("Wählen Sie eine Option: ");
-
-            int wahl = scanner.nextInt();
-            scanner.nextLine();
-            switch (wahl) {
-                case 1:
-                    ueberweisungInter(gebenKonto, ungueltigKonto, ungueltigBetrag);
-                    break;
-                case 2:
-                    einzahlungInter(gebenKonto, ungueltigKonto, ungueltigBetrag);
-                    break;
-                case 3:
-                    abhebenInter(gebenKonto, ungueltigKonto, ungueltigBetrag);
-                    break;
-                    case 4:
-                        transaktionenAnzeigen(gebenKonto, ungueltigKonto);
-                        break;
-                        case 5:
-                            kontoInfos(gebenKonto, ungueltigKonto);
-                            break;
-                            case 6:
-                                running = false;
-                                break;
-                                default:
-                                    break;
-            }
-        }
-    }*/
-    
     public void ueberweisungInter(String gebenKonto, String ungueltigKonto, String ungueltigBetrag) {
     	view.ausgabe(gebenKonto);
         int ibansender = Integer.parseInt(scanner.nextLine());

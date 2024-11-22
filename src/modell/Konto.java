@@ -1,10 +1,12 @@
 package modell;
 
+import view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Konto extends Bank {
+public class Konto  {
     private int iban;
     private int ueberweisungslimit;
     private double kontostand;
@@ -12,6 +14,7 @@ public class Konto extends Bank {
     private Bank bank;
     private double dispolimit;
     private List<String> transaktionsliste;
+    public static final View view = new View();
 
     public Konto() {
     }
