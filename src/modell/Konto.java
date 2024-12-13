@@ -4,9 +4,8 @@ import view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class Konto  {
+public class Konto {
     private int iban;
     private int ueberweisungslimit;
     private double kontostand;
@@ -17,6 +16,7 @@ public class Konto  {
     public static final View view = new View();
 
     public Konto() {
+        this.transaktionsliste = new ArrayList<>();
     }
 
     public Konto(Bank bank, int iban, double kontostand, double dispolimit, int ueberweisungslimit, Kunde kunde) {
@@ -51,19 +51,6 @@ public class Konto  {
     }
     public void setBank(Bank bank) {
         this.bank = bank;
-    }
-    public List<String> getTransaktionsliste() {
-        return transaktionsliste;
-    }
-
-    public void printTransaktionen() {
-        view.ausgabe("Transaktionen für Konto " + this.getIban() + ":");
-        for (String transaktion : transaktionsliste) {
-            view.ausgabe(transaktion);
-        }
-    }
-    public void addTransaktion(String transaktion) {
-        this.transaktionsliste.add(transaktion);
     }
     public void setDispolimit(double dispolimit) {
         this.dispolimit = dispolimit;
@@ -113,31 +100,5 @@ public class Konto  {
         kunde.setBargeld(test2);
         this.kontostand -= betrag;
         this.transaktionsliste.add("Abhebung: -" + betrag + " €");
-    }
-    public boolean transaktion(double betrag, Konto empfaenger, int blz, int iban) {
-        if (betrag > this.ueberweisungslimit) {
-            view.ausgabe("Abgelehnt: Der Betrag " + betrag + " liegt über dem Überweisungslimit.\n");
-            return false;
-        }
-        if (this.kontostand - betrag < -this.dispolimit) {
-            view.ausgabe("Abgelehnt: Dispolimit überschritten.\nKontostand: " + getKontostand() + "\n");
-            return false;
-        }
-        this.kontostand -= betrag;
-        empfaenger.kontostand += betrag;
-        this.transaktionsliste.add("Überweisung an Konto " + empfaenger.getIban() + ": -" + betrag + " €");
-        empfaenger.addTransaktion("Eingang von Konto " + this.getIban() + ": +" + betrag + " €");
-        System.out.print("Haben Sie einen Moment Geduld");
-        for(int i = 0; i <= 2; i++) {
-            System.out.print(".");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
-        }
-        view.ausgabe("\n\nÜberweisung erfolgreich: " + betrag + " € an Konto " + empfaenger.getIban());
-        return true;
     }
 }
