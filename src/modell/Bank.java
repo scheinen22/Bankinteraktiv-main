@@ -14,6 +14,9 @@ public class Bank {
     private final Scanner scanner = new Scanner(System.in);
     private final List<Konto> konten;
     public static final View view = new View();
+    private static final String GEBEN_KONTO = "Geben Sie Ihre Kontonummer ein: ";
+    private static final String UNGUELTIG_KONTO = "Ungültige Kontonummer";
+    private static final String UNGUELTIG_BETRAG = "Ungültiger Betrag";
 
     //Konstruktor
     //Standard Konstruktor
@@ -26,7 +29,7 @@ public class Bank {
         this.setBankname(bankname);
         this.konten = new ArrayList<>();
     }
-    
+
     //Getter & Setter
     public String getBankname() {
         return bankname;
@@ -42,29 +45,24 @@ public class Bank {
     }
     
     //Methoden
-    public String bankinformationenAnzeigenString() {
+    @Override
+    public String toString() {
         return "\nBLZ: " + this.getBlz() + "\nBankname: " + this.getBankname();
     }
-    
-    public static void transfer(Konto sender, Konto empfaenger, double betrag, int blz, int iban) {
-        if (empfaenger == null || empfaenger.getBank() == null || empfaenger.getBank().getBlz() <= 0) {
-        	view.ausgabe("Empfänger nicht vorhanden");
-            return;
-        }
-        if (empfaenger.getBank().getBlz() != blz && empfaenger.getIban() != iban) {
-        	view.ausgabe("Überweisung fehlgeschlagen.\nIBAN und Bankleitzahl stimmen nicht überein.\n");
-            return;
-        }
-        if (empfaenger.getBank().getBlz() != blz) {
-        	view.ausgabe("Überweisung fehlgeschlagen.\nBankleitzahl stimmt nicht überein.\n");
-            return;
-        }
-        if (empfaenger.getIban() != iban) {
-        	view.ausgabe("Überweisung fehlgeschlagen.\nIBAN stimmt nicht überein.\n");
-            return;
-        }
-        if (sender.transaktion(betrag, empfaenger, blz, iban)) {
-        	view.ausgabe("Überweisung von Konto " + sender.getIban() + " zu Konto " + empfaenger.getIban() + " abgeschlossen.\n");
+
+    public void ueberweisung(Konto sender, Konto empfaenger, int blz, double betrag, String verwendungszweck) {
+        try {
+            if (empfaenger == null || empfaenger.getBank() == null || empfaenger.getBank().getBlz() <= 0) {
+                throw new NullPointerException("Empfänger nicht vorhanden");
+            }
+            if (empfaenger.getBank().getBlz() != blz) {
+                System.out.println("Überweisung fehlgeschlagen.\nBankleitzahl stimmt nicht überein.\n");
+                return;
+            }
+            Transaktion t = new Transaktion(sender, empfaenger, betrag, verwendungszweck);
+            t.durchfuehren();
+        } catch (IllegalArgumentException e) {
+            view.ausgabe("Fehler bei der Durchführung: " + e.getMessage());
         }
     }
     
@@ -84,12 +82,13 @@ public class Bank {
         }
         return null;
     }
-    public void ueberweisungInter(String gebenKonto, String ungueltigKonto, String ungueltigBetrag) {
-    	view.ausgabe(gebenKonto);
+
+    public void ueberweisungInteraktiv() {
+    	view.ausgabe(GEBEN_KONTO);
         int ibansender = Integer.parseInt(scanner.nextLine());
         Konto senderkonto = findeKonto(ibansender);
         if (senderkonto == null) {
-        	view.ausgabe(ungueltigKonto);
+        	view.ausgabe(UNGUELTIG_KONTO);
             return;
         }
         view.ausgabe("Geben Sie die Empfängerkontonummer ein: ");
@@ -100,80 +99,78 @@ public class Bank {
             return;
         }
         view.ausgabe("Geben Sie die Bankleitzahl des Empfängers ein: ");
-        int blzemp = Integer.parseInt(scanner.nextLine());
-        if (blzemp <= 0) {
+        int blzempfaenger = Integer.parseInt(scanner.nextLine());
+        if (blzempfaenger <= 0) {
             view.ausgabe("Ungültige Bankleitzahl");
             return;
         }
         view.ausgabe("Geben die den gewünschten Betrag an: ");
-        double betragemp = Double.parseDouble(scanner.nextLine());
-        if (betragemp <= 0) {
-        	view.ausgabe(ungueltigBetrag);
+        double betragempfaenger = Double.parseDouble(scanner.nextLine());
+        if (betragempfaenger <= 0) {
+        	view.ausgabe(UNGUELTIG_BETRAG);
             return;
         }
-        transfer(senderkonto, empfaenger, betragemp, blzemp, ibanempfaenger);
+        view.ausgabe("Geben die den Verwendungszweck an: ");
+        String verwendungszweck = scanner.nextLine();
+        ueberweisung(senderkonto, empfaenger, blzempfaenger, betragempfaenger, verwendungszweck);
     }
     
-    public void einzahlungInter(String gebenKonto, String ungueltigKonto, String ungueltigBetrag) {
-    	view.ausgabe(gebenKonto);
-        int ibaneing = Integer.parseInt(scanner.nextLine());
-        Konto iban = findeKonto(ibaneing);
-        view.ausgabe("Bargeld: " + iban.getKunde().getBargeld());
-        if (iban == null) {
-        	view.ausgabe(ungueltigKonto);
+    public void einzahlungInteraktiv() {
+    	view.ausgabe(GEBEN_KONTO);
+        int ibaneingabe = Integer.parseInt(scanner.nextLine());
+        Konto eingabeKonto = findeKonto(ibaneingabe);
+        view.ausgabe("Bargeld: " + eingabeKonto.getKunde().getBargeld());
+
+        view.ausgabe("Gebe den gewünschten Betrag ein: ");
+        double betragempfaenger = Double.parseDouble(scanner.nextLine());
+        if (betragempfaenger <= 0) {
+        	view.ausgabe(UNGUELTIG_BETRAG);
+            return;
+        }
+        eingabeKonto.einzahlungBargeld(betragempfaenger);
+    }
+    
+    public void abhebenInteraktiv() {
+    	view.ausgabe(GEBEN_KONTO);
+        int ibaneingabe = Integer.parseInt(scanner.nextLine());
+        Konto eingabeKonto = findeKonto(ibaneingabe);
+        if (eingabeKonto == null) {
+        	view.ausgabe(UNGUELTIG_KONTO);
             return;
         }
         view.ausgabe("Gebe den gewünschten Betrag ein: ");
-        double betragemp2 = Double.parseDouble(scanner.nextLine());
-        if (betragemp2 <= 0) {
-        	view.ausgabe(ungueltigBetrag);
+        double betragempfaenger = Double.parseDouble(scanner.nextLine());
+        if (betragempfaenger <= 0) {
+        	view.ausgabe(UNGUELTIG_BETRAG);
             return;
         }
-        iban.einzahlung(betragemp2);
-    }
-    
-    public void abhebenInter(String gebenKonto, String ungueltigKonto, String ungueltigBetrag) {
-    	view.ausgabe(gebenKonto);
-        int ibaneing2 = Integer.parseInt(scanner.nextLine());
-        Konto iban2  = findeKonto(ibaneing2);
-        if (iban2 == null) {
-        	view.ausgabe(ungueltigKonto);
-            return;
-        }
-        view.ausgabe("Gebe den gewünschten Betrag ein: ");
-        double betragemp3 = Double.parseDouble(scanner.nextLine());
-        if (betragemp3 <= 0) {
-        	view.ausgabe(ungueltigBetrag);
-            return;
-        }
-        if (iban2.getKontostand() - betragemp3 < iban2.getDispolimit()) {
+        if (eingabeKonto.getKontostand() - betragempfaenger < eingabeKonto.getDispolimit()) {
         	view.ausgabe("Abhebung fehlgeschlagen: Konto überzogen. Dispolimit erreicht.");
             return;
         }
-        iban2.abheben(betragemp3);
-        view.ausgabe("Abhebung erfolgreich: " + betragemp3 + "€ wurde von deinem Konto abgehoben.");
+        eingabeKonto.abhebenBargeld(betragempfaenger);
     }
     
-    public void kontoInfos(String gebenKonto, String ungueltigKonto) {
-        view.ausgabe(gebenKonto);
-        int ibaneing5 = Integer.parseInt(scanner.nextLine());
-        Konto iban5  = findeKonto(ibaneing5);
-        if (iban5 == null) {
-            view.ausgabe(ungueltigKonto);
+    public void kontoInfosInteraktiv() {
+        view.ausgabe(GEBEN_KONTO);
+        int ibaneingabe = Integer.parseInt(scanner.nextLine());
+        Konto eingabeKonto  = findeKonto(ibaneingabe);
+        if (eingabeKonto == null) {
+            view.ausgabe(UNGUELTIG_KONTO);
             return;
         }
-        view.ausgabe(iban5.getBank().bankinformationenAnzeigenString() + iban5.kontoinformationenAnzeigenString() + iban5.getKunde().kundeninformationenAnzeigenString());
+        view.ausgabe(eingabeKonto.getBank().toString() + eingabeKonto.toString() + eingabeKonto.getKunde().toString());
     }
     
-    public void transaktionenAnzeigen(String gebenKonto, String ungueltigKonto) {
-        view.ausgabe(gebenKonto);
-        int ibaneing4 = Integer.parseInt(scanner.nextLine());
-        Konto iban3  = findeKonto(ibaneing4);
-        if (iban3 == null) {
-            view.ausgabe(ungueltigKonto);
+    public void transaktionenAnzeigenInteraktiv() {
+        view.ausgabe(GEBEN_KONTO);
+        int ibaneingabe = Integer.parseInt(scanner.nextLine());
+        Konto eingabeKonto  = findeKonto(ibaneingabe);
+        if (eingabeKonto == null) {
+            view.ausgabe(UNGUELTIG_KONTO);
             return;
         }
-        iban3.printTransaktionen();
+        eingabeKonto.zeigeTransaktionen();
     }
 }
 

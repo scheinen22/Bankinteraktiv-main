@@ -1,6 +1,7 @@
 package modell;
 
 public class Kunde {
+
     private String vorname;
     private String nachname;
     private String geburtsdatum;
@@ -44,7 +45,9 @@ public class Kunde {
     public void setBargeld(double bargeld) {
         this.bargeld = bargeld;
     }
-    public String kundeninformationenAnzeigenString() {
+
+    @Override
+    public String toString() {
         return "\nVorname: " + this.getVorname() + "\nNachname: " + this.getNachname() + "\nGeburtsdatum: " + this.getGeburtsdatum() + "\nAdresse: " + this.getAdresse() + "\nBargeld: " + this.getBargeld() + "€";
     }
 }
