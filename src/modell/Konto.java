@@ -3,6 +3,7 @@ package modell;
 import view.View;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Konto {
@@ -71,7 +72,7 @@ public class Konto {
     }
 
     public void zeigeTransaktionen() {
-        transaktionsliste.sort((t1, t2) -> t1.getZeitpunkt().compareTo(t2.getZeitpunkt()));
+        transaktionsliste.sort(Comparator.comparing(Transaktion::getZeitpunkt));
         for (Transaktion t : transaktionsliste) {
             System.out.println(t);
         }
