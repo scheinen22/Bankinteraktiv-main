@@ -127,7 +127,7 @@ public class Bank {
         	view.ausgabe(UNGUELTIG_BETRAG);
             return;
         }
-        eingabeKonto.einzahlungBargeld(betragempfaenger);
+        eingabeKonto.einzahlen(betragempfaenger);
     }
     
     public void abhebenInteraktiv() {
@@ -148,7 +148,7 @@ public class Bank {
         	view.ausgabe("Abhebung fehlgeschlagen: Konto überzogen. Dispolimit erreicht.");
             return;
         }
-        eingabeKonto.abhebenBargeld(betragempfaenger);
+        eingabeKonto.abheben(betragempfaenger);
     }
     
     public void kontoInfosInteraktiv() {

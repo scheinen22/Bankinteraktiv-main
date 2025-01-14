@@ -78,7 +78,7 @@ public class Konto {
         }
     }
 
-    public void einzahlungBargeld(double betrag) {
+    public void einzahlen(double betrag) {
         if (betrag <= 0) {
             view.ausgabe("Einzahlung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
             return;
@@ -100,17 +100,17 @@ public class Konto {
         this.transaktionsliste.add(new Transaktion(null, this, betrag, null));
     }
 
-    public void einzahlungOhneBargeld(double betrag, String verwendungszweck) {
+    public void ueberweisungEingang(double betrag, String verwendungszweck) {
         if (betrag <= 0) {
-            throw new IllegalArgumentException("Einzahlung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
+            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
         }
         this.kontostand += betrag;
         this.transaktionsliste.add(new Transaktion(null, this, betrag, verwendungszweck));
     }
 
-    public void abhebenOhneBargeld(double betrag, String verwendungszweck) {
+    public void ueberweisungAbzug(double betrag, String verwendungszweck) {
         if (betrag <= 0) {
-            throw new IllegalArgumentException("Ungültiger Betrag");
+            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
         }
         if (this.kontostand - betrag < this.dispolimit) {
             throw new IllegalArgumentException("Dispolimit erreicht.");
@@ -119,7 +119,7 @@ public class Konto {
         transaktionsliste.add(new Transaktion(this, null, betrag, verwendungszweck));
     }
 
-    public void abhebenBargeld(double betrag) {
+    public void abheben(double betrag) {
         if (betrag <= 0) {
             throw new IllegalArgumentException("Ungültiger Betrag");
         }

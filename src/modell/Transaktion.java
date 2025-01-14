@@ -37,10 +37,10 @@ public class Transaktion {
     public void durchfuehren() {
         try {
             if (sender != null) {
-                sender.abhebenOhneBargeld(betrag, verwendungszweck);
+                sender.ueberweisungAbzug(betrag, verwendungszweck);
             }
             if (empfaenger != null) {
-                empfaenger.einzahlungOhneBargeld(betrag, verwendungszweck);
+                empfaenger.ueberweisungEingang(betrag, verwendungszweck);
             }
             System.out.print("Haben Sie einen Moment Geduld");
             printPunkte();
