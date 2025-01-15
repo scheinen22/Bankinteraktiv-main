@@ -58,7 +58,7 @@ public class Bank {
                 throw new NullPointerException("Überweisung fehlgeschlagen: Empfänger existiert nicht.");
             }
             if (empfaenger.getBank().getBlz() != blz) {
-                throw new IllegalArgumentException("Überweisung fehlgeschlagen.\nBankleitzahl stimmt nicht überein.\n");
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: Bankleitzahl stimmt nicht überein.");
             }
             Transaktion t = new Transaktion(sender, empfaenger, betrag, verwendungszweck);
             t.durchfuehren();
