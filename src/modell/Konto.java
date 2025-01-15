@@ -15,6 +15,7 @@ public class Konto {
     private double dispolimit;
     private List<Transaktion> transaktionsliste;
     public static final View view = new View();
+    public static final String REALISTISCHER_BEREICH = "liegt im nicht realistischen Bereich.";
 
     public Konto() {
         this.transaktionsliste = new ArrayList<>();
@@ -79,30 +80,34 @@ public class Konto {
     }
 
     public void einzahlen(double betrag) {
-        if (betrag <= 0) {
-            view.ausgabe("Einzahlung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
-            return;
+        try {
+            if (betrag <= 0) {
+                throw new IllegalArgumentException("Einzahlung fehlgeschlagen: " + betrag + REALISTISCHER_BEREICH);
+            }
+            if (kunde.getBargeld() <= 0) {
+                throw new IllegalArgumentException("Einzahlung fehlgeschlagen: Kein Bargeld vorhanden.");
+            }
+            double test = kunde.getBargeld();
+            if (test - betrag < 0) {
+                throw new IllegalArgumentException("Einzahlung fehlgeschlagen: Nicht genügend Bargeld vorhanden.");
+            }
+            this.kontostand += betrag;
+            double test2 = kunde.getBargeld();
+            test2 -= betrag;
+            kunde.setBargeld(test2);
+            view.ausgabe("Einzahlung erfolgreich: " + betrag + "€ wurde auf dein Konto eingezahlt.");
+            this.transaktionsliste.add(new Transaktion(null, this, betrag, null));
+        } catch (IllegalArgumentException e) {
+            view.ausgabe(e.getMessage());
         }
-        if (kunde.getBargeld() <= 0) {
-            view.ausgabe("Einzahlung fehlgeschlagen: Kein Bargeld vorhanden.");
-            return;
-        }
-        double test = kunde.getBargeld();
-        if (test - betrag < 0) {
-            view.ausgabe("Einzahlung fehlgeschlagen: Nicht genügend Bargeld vorhanden");
-            return;
-        }
-        this.kontostand += betrag;
-        double test2 = kunde.getBargeld();
-        test2 -= betrag;
-        kunde.setBargeld(test2);
-        view.ausgabe("Einzahlung erfolgreich: " + betrag + "€ wurde auf dein Konto eingezahlt.");
-        this.transaktionsliste.add(new Transaktion(null, this, betrag, null));
     }
 
     public void ueberweisungEingang(double betrag, String verwendungszweck) {
         if (betrag <= 0) {
-            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
+            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + REALISTISCHER_BEREICH);
+        }
+        if (betrag > this.ueberweisungslimit) {
+            view.ausgabe("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
         }
         this.kontostand += betrag;
         this.transaktionsliste.add(new Transaktion(null, this, betrag, verwendungszweck));
@@ -110,7 +115,10 @@ public class Konto {
 
     public void ueberweisungAbzug(double betrag, String verwendungszweck) {
         if (betrag <= 0) {
-            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + "liegt im nicht realistischen Bereich.");
+            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + REALISTISCHER_BEREICH);
+        }
+        if (betrag > this.ueberweisungslimit) {
+            throw new IllegalArgumentException("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
         }
         if (this.kontostand - betrag < this.dispolimit) {
             throw new IllegalArgumentException("Dispolimit erreicht.");
@@ -120,18 +128,22 @@ public class Konto {
     }
 
     public void abheben(double betrag) {
-        if (betrag <= 0) {
-            throw new IllegalArgumentException("Ungültiger Betrag");
+        try {
+            if (betrag <= 0) {
+                throw new IllegalArgumentException("Abhebung fehlgeschlagen: " + betrag + REALISTISCHER_BEREICH);
+            }
+            if (this.kontostand - betrag < this.dispolimit) {
+                throw new IllegalArgumentException("Abhebung fehlgeschlagen: Das Dispolimit wurde erreicht.");
+            }
+            double kundeBargeldTemporaer = kunde.getBargeld();
+            kundeBargeldTemporaer += betrag;
+            kunde.setBargeld(kundeBargeldTemporaer);
+            this.kontostand -= betrag;
+            view.ausgabe("Abhebung erfolgreich: " + betrag + "€ wurde von deinem Konto abgehoben.");
+            transaktionsliste.add(new Transaktion(this, null, betrag, null));
+        } catch (IllegalArgumentException e) {
+            view.ausgabe(e.getMessage());
         }
-        if (this.kontostand - betrag < this.dispolimit) {
-            throw new IllegalArgumentException("Dispolimit erreicht.");
-        }
-        double kundeBargeldTemporaer = kunde.getBargeld();
-        kundeBargeldTemporaer += betrag;
-        kunde.setBargeld(kundeBargeldTemporaer);
-        this.kontostand -= betrag;
-        view.ausgabe("Abhebung erfolgreich: " + betrag + "€ wurde von deinem Konto abgehoben.");
-        transaktionsliste.add(new Transaktion(this, null, betrag, null));
     }
 
 }

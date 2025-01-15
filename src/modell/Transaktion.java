@@ -46,7 +46,7 @@ public class Transaktion {
             printPunkte();
             view.ausgabe("\nTransaktion erfolgreich: " + betrag + "€ wurden an das Konto " + empfaenger.getIban() + " überwiesen.");
         } catch (IllegalArgumentException e) {
-            view.ausgabe("Fehler bei der Durchführung " + e.getMessage());
+            view.ausgabe(e.getMessage());
         }
     }
 
