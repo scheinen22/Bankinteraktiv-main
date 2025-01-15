@@ -48,6 +48,6 @@ public class Kunde {
 
     @Override
     public String toString() {
-        return "\nVorname: " + this.getVorname() + "\nNachname: " + this.getNachname() + "\nGeburtsdatum: " + this.getGeburtsdatum() + "\nAdresse: " + this.getAdresse() + "\nBargeld: " + this.getBargeld() + "€";
+        return "\nVorname: " + this.getVorname() + "\nNachname: " + this.getNachname() + "\nGeburtsdatum: " + this.getGeburtsdatum() + "\nAdresse: " + this.getAdresse() + "\nBargeld: " + this.getBargeld() + "€" + "\n----------------------";
     }
 }

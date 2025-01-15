@@ -27,7 +27,6 @@ public class Controller {
 	public void run() {
 			startVariablen();
 	        boolean running = true;
-
 			while (running) {
 	        	view.ausgabe("\n--- Bank Menü ---");
 	        	view.ausgabe("1. Überweisung");
@@ -62,6 +61,6 @@ public class Controller {
 	                                default:
 	                                    break;
 	            }
-	        }
-	    }
+			}
+	}
 }

@@ -69,7 +69,7 @@ public class Konto {
 
     @Override
     public String toString() {
-        return "\nIBAN: " + getIban() + "\nKontostand: " + getKontostand() + "€";
+        return "\nIBAN: " + getIban() + "\nKontostand: " + getKontostand() + "€" +"\nÜberweisungslimit: " + getUeberweisungslimit() + "€" + "\nDispolimit: " + getDispolimit() + "€" + "\n----------------------";
     }
 
     public void zeigeTransaktionen() {
@@ -121,7 +121,7 @@ public class Konto {
             throw new IllegalArgumentException("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
         }
         if (this.kontostand - betrag < this.dispolimit) {
-            throw new IllegalArgumentException("Dispolimit erreicht.");
+            throw new IllegalArgumentException("Überweisung fehlgeschlagen: Das Dispolimit wurde erreicht.");
         }
         this.kontostand -= betrag;
         transaktionsliste.add(new Transaktion(this, null, betrag, verwendungszweck));
@@ -145,6 +145,5 @@ public class Konto {
             view.ausgabe(e.getMessage());
         }
     }
-
 }
 

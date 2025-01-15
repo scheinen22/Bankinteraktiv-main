@@ -21,6 +21,7 @@ public class Bank {
     public Bank() {
         this.konten = new ArrayList<>();
     }
+
     //Spezial Konstruktor
     public Bank(int blz, String bankname) {
         this.setBlz(blz);
@@ -45,7 +46,7 @@ public class Bank {
     //Methoden
     @Override
     public String toString() {
-        return "\nBLZ: " + this.getBlz() + "\nBankname: " + this.getBankname();
+        return "\n----------------------" + "\nBLZ: " + this.getBlz() + "\nBankname: " + this.getBankname() + "\n----------------------";
     }
 
     public void ueberweisung(Konto sender, Konto empfaenger, int blz, double betrag, String verwendungszweck) {
@@ -67,10 +68,14 @@ public class Bank {
     }
     
     public void addKonto(Konto konto) {
-        if (konto == null) {
-        	view.ausgabe("Kontoliste ist null.");
-        } else {
-            this.konten.add(konto);
+        try {
+            if (konto == null) {
+                throw new NullPointerException("Das angegebene Konto existiert nicht.");
+            } else {
+                this.konten.add(konto);
+            }
+        } catch (NullPointerException e) {
+            view.ausgabe(e.getMessage());
         }
     }
     
@@ -87,14 +92,14 @@ public class Bank {
     	view.ausgabe(GEBEN_KONTO);
         int ibansender = Integer.parseInt(scanner.nextLine());
         Konto senderkonto = findeKonto(ibansender);
-        view.ausgabe("Geben Sie die Empfängerkontonummer ein: ");
+        view.ausgabe("Geben Sie die Kontonummer des Empfängers ein: ");
         int ibanempfaenger = Integer.parseInt(scanner.nextLine());
         Konto empfaenger = findeKonto(ibanempfaenger);
         view.ausgabe("Geben Sie die Bankleitzahl des Empfängers ein: ");
         int blzempfaenger = Integer.parseInt(scanner.nextLine());
-        view.ausgabe("Geben die den gewünschten Betrag an: ");
+        view.ausgabe("Geben Sie den gewünschten Betrag ein: ");
         double betragempfaenger = Double.parseDouble(scanner.nextLine());
-        view.ausgabe("Geben die den Verwendungszweck an: ");
+        view.ausgabe("Geben Sie den Verwendungszweck ein: ");
         String verwendungszweck = scanner.nextLine();
         ueberweisung(senderkonto, empfaenger, blzempfaenger, betragempfaenger, verwendungszweck);
     }
@@ -107,8 +112,8 @@ public class Bank {
             if (eingabeKonto == null) {
                 throw new NullPointerException("Einzahlung fehlgeschlagen: Kontonummer existiert nicht.");
             }
-            view.ausgabe("Bargeld: " + eingabeKonto.getKunde().getBargeld());
-            view.ausgabe("Gebe den gewünschten Betrag ein: ");
+            view.ausgabe("Vorhandenes Bargeld: " + eingabeKonto.getKunde().getBargeld());
+            view.ausgabe("Geben Sie den gewünschten Betrag ein: ");
             double betragempfaenger = Double.parseDouble(scanner.nextLine());
             eingabeKonto.einzahlen(betragempfaenger);
         } catch (NullPointerException e) {
@@ -127,6 +132,7 @@ public class Bank {
             view.ausgabe("Gebe den gewünschten Betrag ein: ");
             double betragempfaenger = Double.parseDouble(scanner.nextLine());
             eingabeKonto.abheben(betragempfaenger);
+            view.ausgabe("Aktuelles Bargeld: " + eingabeKonto.getKunde().getBargeld());
         } catch (NullPointerException e) {
             view.ausgabe(e.getMessage());
         }
