@@ -49,24 +49,6 @@ public class Bank {
         return "\n----------------------" + "\nBLZ: " + this.getBlz() + "\nBankname: " + this.getBankname() + "\n----------------------";
     }
 
-    public void ueberweisung(Konto sender, Konto empfaenger, int blz, double betrag, String verwendungszweck) {
-        try {
-            if (sender == null || sender.getBank() == null || sender.getBank().getBlz() <= 0) {
-                throw new NullPointerException("Überweisung fehlgeschlagen: Sender existiert nicht.");
-            }
-            if (empfaenger == null || empfaenger.getBank() == null || empfaenger.getBank().getBlz() <= 0) {
-                throw new NullPointerException("Überweisung fehlgeschlagen: Empfänger existiert nicht.");
-            }
-            if (empfaenger.getBank().getBlz() != blz) {
-                throw new IllegalArgumentException("Überweisung fehlgeschlagen: Bankleitzahl stimmt nicht überein.");
-            }
-            Transaktion t = new Transaktion(sender, empfaenger, betrag, verwendungszweck);
-            t.durchfuehren();
-        } catch (IllegalArgumentException | NullPointerException e) {
-            view.ausgabe(e.getMessage());
-        }
-    }
-    
     public void addKonto(Konto konto) {
         try {
             if (konto == null) {
@@ -89,19 +71,36 @@ public class Bank {
     }
 
     public void ueberweisungInteraktiv() {
-    	view.ausgabe(GEBEN_KONTO);
-        int ibansender = Integer.parseInt(scanner.nextLine());
-        Konto senderkonto = findeKonto(ibansender);
-        view.ausgabe("Geben Sie die Kontonummer des Empfängers ein: ");
-        int ibanempfaenger = Integer.parseInt(scanner.nextLine());
-        Konto empfaenger = findeKonto(ibanempfaenger);
-        view.ausgabe("Geben Sie die Bankleitzahl des Empfängers ein: ");
-        int blzempfaenger = Integer.parseInt(scanner.nextLine());
-        view.ausgabe("Geben Sie den gewünschten Betrag ein: ");
-        double betragempfaenger = Double.parseDouble(scanner.nextLine());
-        view.ausgabe("Geben Sie den Verwendungszweck ein: ");
-        String verwendungszweck = scanner.nextLine();
-        ueberweisung(senderkonto, empfaenger, blzempfaenger, betragempfaenger, verwendungszweck);
+        try {
+            view.ausgabe(GEBEN_KONTO);
+            int ibansender = Integer.parseInt(scanner.nextLine());
+            Konto senderkonto = findeKonto(ibansender);
+            if (senderkonto == null) {
+                throw new NullPointerException("Überweisung fehlgeschlagen: Sender existiert nicht.");
+            }
+            view.ausgabe("Geben Sie die Kontonummer des Empfängers ein: ");
+            int ibanempfaenger = Integer.parseInt(scanner.nextLine());
+            Konto empfaenger = findeKonto(ibanempfaenger);
+            if (empfaenger == null) {
+                throw new NullPointerException("Überweisung fehlgeschlagen: Empfänger existiert nicht.");
+            }
+            view.ausgabe("Geben Sie die Bankleitzahl des Empfängers ein: ");
+            int blzempfaenger = Integer.parseInt(scanner.nextLine());
+            if (empfaenger.getBank() == null) {
+                throw new NullPointerException("Überweisung fehlgeschlagen: Bank existiert nicht.");
+            }
+            if (empfaenger.getBank().getBlz() != blzempfaenger) {
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: Bankleitzahl stimmt nicht überein.");
+            }
+            view.ausgabe("Geben Sie den gewünschten Betrag ein: ");
+            double betragempfaenger = Double.parseDouble(scanner.nextLine());
+            view.ausgabe("Geben Sie den Verwendungszweck ein: ");
+            String verwendungszweck = scanner.nextLine();
+            Transaktion t = new Transaktion(senderkonto, empfaenger, betragempfaenger, verwendungszweck);
+            t.durchfuehren();
+        } catch (IllegalArgumentException | NullPointerException e) {
+            view.ausgabe(e.getMessage());
+        }
     }
     
     public void einzahlungInteraktiv() {
