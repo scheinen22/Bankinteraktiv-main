@@ -13,13 +13,9 @@ public class Konto {
     private Kunde kunde;
     private Bank bank;
     private double dispolimit;
-    private List<Transaktion> transaktionsliste;
+    private final List<Transaktion> transaktionsliste;
     public static final View view = new View();
     public static final String IST_EIN_UNGUELTIGER_BETRAG = " ist ein ungültiger Betrag.";
-
-    public Konto() {
-        this.transaktionsliste = new ArrayList<>();
-    }
 
     public Konto(Bank bank, int kontonummer, double kontostand, double dispolimit, int ueberweisungslimit, Kunde kunde) {
         this.setKunde(kunde);

@@ -145,7 +145,7 @@ public class Bank {
             if (eingabeKonto == null) {
                 throw new NullPointerException("Aktion fehlgeschlagen: Kontonummer existiert nicht.");
             }
-            view.ausgabe(eingabeKonto.getBank().toString() + eingabeKonto.toString() + eingabeKonto.getKunde().toString());
+            view.ausgabe(eingabeKonto.getBank().toString() + eingabeKonto + eingabeKonto.getKunde().toString());
         } catch (NullPointerException e) {
             view.ausgabe(e.getMessage());
         }
