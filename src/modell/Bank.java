@@ -61,9 +61,9 @@ public class Bank {
         }
     }
     
-    public Konto findeKonto(int Kontonummer) {
+    public Konto findeKonto(int kontonummer) {
         for (Konto konto : konten) {
-            if (konto.getKontonummer() == Kontonummer) {
+            if (konto.getKontonummer() == kontonummer) {
                 return konto;
             }
         }
