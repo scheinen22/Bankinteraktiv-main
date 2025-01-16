@@ -7,13 +7,21 @@ import modell.Konto;
 import modell.Kunde;
 import view.View;
 
+/**
+ * @author Patrick Ferrera, Said Halilovic
+ * @version 1.0
+ */
 public class Controller {
-	//Eigenschaften
+	// Attribute
 	View view = new View(); 
 	Scanner scanner = new Scanner(System.in);
 	Bank bank = new Bank();
-	
-	//Start Variablen anlegen
+
+	/**
+	 * Start Variablen anlegen und Konten zur Arraylist hinzufügen, damit sie gefunden werden können.
+	 * {@link Konto#Konto(Bank, int, double, double, int, Kunde)}  Konto}
+	 * {@link Bank#addKonto(Konto)}
+	 */
 	public void startVariablen() {
 		Konto konto = new Konto(new Bank(12345, "Sparkasse"), 432323, 28923.12, -2000, 2000, new Kunde("Jochen", "Schmidt", "21.12.2000", "Teststraße", 1000));
         Konto konto2 = new Konto(new Bank(123456, "Sparkasse"), 2131, 31331.32, -2000, 2000, new Kunde("Kai", "Humboldt", "12.10.2000", "Bevingsweg", 200));
@@ -22,8 +30,16 @@ public class Controller {
         bank.addKonto(konto2);
         bank.addKonto(konto3);
 	}
-	
-	//Ablauf des Programmes
+
+	/**
+	 * Ablaufsteuerung für das Programm. Wird durch eine while Schleife in Kombination mit einer switch Anweisung erreicht.
+	 * @see #startVariablen()
+	 * {@link Bank#ueberweisungInteraktiv()}
+	 * {@link Bank#einzahlungInteraktiv()}
+	 * {@link Bank#abhebenInteraktiv()}
+	 * {@link Bank#transaktionenAnzeigenInteraktiv()}
+	 * {@link Bank#kontoInfosInteraktiv()}
+	 */
 	public void run() {
 			startVariablen();
 	        boolean running = true;

@@ -6,9 +6,12 @@ import java.util.Scanner;
 
 import view.View;
 
+/**
+ * @author Said Halilovic, Patrick Ferrera
+ * @version 1.0
+ */
 public class Bank {
-
-	//Eigenschaften
+	// Attribute
     private int blz;
     private String bankname;
     private final Scanner scanner = new Scanner(System.in);
@@ -16,20 +19,25 @@ public class Bank {
     public static final View view = new View();
     private static final String GEBEN_KONTO = "Geben Sie Ihre Kontonummer ein: ";
 
-    //Konstruktor
-    //Standard Konstruktor
+    /**
+     * Standard Konstruktor für das Bankobjekt, wird im Controller benötigt.
+     */
     public Bank() {
         this.konten = new ArrayList<>();
     }
 
-    //Spezial Konstruktor
+    /**
+     * Konstruktor für das Bankobjekt.
+     * @param blz # Bankleitzahl, Kennnummer der Bank
+     * @param bankname # Name der Bank
+     */
     public Bank(int blz, String bankname) {
         this.setBlz(blz);
         this.setBankname(bankname);
         this.konten = new ArrayList<>();
     }
 
-    //Getter & Setter
+    //Getter & Setter Methoden
     public String getBankname() {
         return bankname;
     }
@@ -52,6 +60,11 @@ public class Bank {
         return "\n----------------------" + "\nBLZ: " + this.getBlz() + "\nBankname: " + this.getBankname() + "\n----------------------";
     }
 
+    /**
+     * Fügt die Konten zu einer Arraylist hinzu. Wird genutzt, um die Kontonummer in einer späteren Methode zu finden.
+     * @param konto # Kontoobjekt
+     * @throws NullPointerException # Falls ein Konto nicht vorhanden ist, wird eine NullpointerException geworfen und abgefangen.
+     */
     public void addKonto(Konto konto) {
         try {
             if (konto == null) {
@@ -63,7 +76,12 @@ public class Bank {
             view.ausgabe(e.getMessage());
         }
     }
-    
+
+    /**
+     * FindeKonto sucht aus der Arraylist der Konten das Konto mit der eingegebenen Kontonummer heraus.
+     * @param kontonummer # Kontonummer
+     * @return kontonummer
+     */
     public Konto findeKonto(int kontonummer) {
         for (Konto konto : konten) {
             if (konto.getKontonummer() == kontonummer) {
@@ -73,6 +91,14 @@ public class Bank {
         return null;
     }
 
+    /**
+     * Interaktiver Ablauf der Überweisung. Erstellt nach verschiedenen Checks ein Transaktionsobjekt und führt die Transaktion durch.
+     * @see #findeKonto(int)
+     * {@link Transaktion#Transaktion(Konto, Konto, double, String)}  Transaktion)}
+     * {@link Transaktion#durchfuehren()}
+     * @throws IllegalArgumentException # Wird bei falscher Eingabe geworfen.
+     * @throws NullPointerException # Wird geworfen, wenn ein Objekt nicht existiert.
+     */
     public void ueberweisungInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
@@ -105,7 +131,13 @@ public class Bank {
             view.ausgabe(e.getMessage());
         }
     }
-    
+
+    /**
+     * Interaktiver Ablauf der Einzahlung. Ruft die Einzahlungsmethode in der Konto Klasse auf.
+     * @see #findeKonto(int)
+     * {@link Konto#einzahlen(double)}
+     * @throws NullPointerException # Wird geworfen, wenn die Kontonummer nicht existiert.
+     */
     public void einzahlungInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
@@ -122,7 +154,13 @@ public class Bank {
             view.ausgabe(e.getMessage());
         }
     }
-    
+
+    /**
+     * Interaktiver Ablauf der Abhebung. Ruft die Abhebungsmethode in der Konto Klasse auf.
+     * @see #findeKonto(int)
+     * {@link Konto#abheben(double)}
+     * @throws NullPointerException # Wird geworfen, wenn die Kontonummer nicht existiert.
+     */
     public void abhebenInteraktiv() {
     	try {
             view.ausgabe(GEBEN_KONTO);
@@ -139,7 +177,15 @@ public class Bank {
             view.ausgabe(e.getMessage());
         }
     }
-    
+
+    /**
+     * Interaktiver Ablauf der Ausgabe der Kontoinformationen. Wird durch die Verkettung der überschriebenen toString() Methoden durchgeführt.
+     * @see #findeKonto(int)
+     * {@link Konto#toString()}
+     * {@link Kunde#toString()}
+     * {@link Bank#toString()}
+     * @throws NullPointerException # Wird geworfen, wenn die Kontonummer nicht existiert.
+     */
     public void kontoInfosInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
@@ -153,7 +199,13 @@ public class Bank {
             view.ausgabe(e.getMessage());
         }
     }
-    
+
+    /**
+     * Interaktiver Ablauf der Transaktionslistenausgabe. Wird durch das Aufrufen der zeigeTransaktionen() Methode erreicht.
+     * @see #findeKonto(int)
+     * {@link Konto#zeigeTransaktionen()}
+     * @throws NullPointerException # Wird geworfen, wenn die Kontonummer nicht existiert.
+     */
     public void transaktionenAnzeigenInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);

@@ -6,7 +6,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * @author Said Halilovic, Patrick Ferrera
+ * @version 1.0
+ */
 public class Konto {
+    // Attribute
     private int kontonummer;
     private int ueberweisungslimit;
     private double kontostand;
@@ -15,8 +20,17 @@ public class Konto {
     private double dispolimit;
     private final List<Transaktion> transaktionsliste;
     public static final View view = new View();
-    public static final String IST_EIN_UNGUELTIGER_BETRAG = " ist ein ungültiger Betrag.";
+    private static final String IST_EIN_UNGUELTIGER_BETRAG = " ist ein ungültiger Betrag.";
 
+    /**
+     * Konstruktor für das Kontoobjekt.
+     * @param bank # Bankobjekt
+     * @param kontonummer # Kontonummer
+     * @param kontostand # Kontostand
+     * @param dispolimit # Dispolimit
+     * @param ueberweisungslimit # Überweisungslimit
+     * @param kunde # Kundenobjekt
+     */
     public Konto(Bank bank, int kontonummer, double kontostand, double dispolimit, int ueberweisungslimit, Kunde kunde) {
         this.setKunde(kunde);
         this.setKontonummer(kontonummer);
@@ -26,7 +40,7 @@ public class Konto {
         this.setDispolimit(dispolimit);
         this.setUeberweisungslimit(ueberweisungslimit);
     }
-
+    // Getter & Setter Methoden
     public int getKontonummer() {
         return kontonummer;
     }
@@ -80,6 +94,9 @@ public class Konto {
         return "\nKontonummer: " + getKontonummer() + "\nKontostand: " + getKontostand() + "€" +"\nÜberweisungslimit: " + getUeberweisungslimit() + "€" + "\nDispolimit: " + getDispolimit() + "€" + "\n----------------------";
     }
 
+    /**
+     * Sortiert die Transaktionen nach dem Zeitpunkt und gibt die Transaktionsliste aus.
+     */
     public void zeigeTransaktionen() {
         transaktionsliste.sort(Comparator.comparing(Transaktion::getZeitpunkt));
         for (Transaktion t : transaktionsliste) {
@@ -87,6 +104,11 @@ public class Konto {
         }
     }
 
+    /**
+     * Geld wird auf das Konto eingezahlt. Ist direkt mit dem Bargeld eines Kunden verknüpft.
+     * @param betrag # Einzahlungsbetrag.
+     * @throws IllegalArgumentException # Falls nicht erlaubte Eingaben eintreten.
+     */
     public void einzahlen(double betrag) {
         try {
             if (betrag <= 0) {
@@ -110,31 +132,56 @@ public class Konto {
         }
     }
 
+    /**
+     * Geld wird auf das Empfängerkonto eingezahlt. Enthält die Kunden Bargeld Logik nicht.
+     * @param betrag # Überweisungsbetrag
+     * @param verwendungszweck # Zweck der Überweisung
+     * @throws IllegalArgumentException # Falls nicht erlaubte Eingaben eintreten.
+     */
     public void ueberweisungEingang(double betrag, String verwendungszweck) {
-        if (betrag <= 0) {
-            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + IST_EIN_UNGUELTIGER_BETRAG);
+        try {
+            if (betrag <= 0) {
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + IST_EIN_UNGUELTIGER_BETRAG);
+            }
+            if (betrag > this.ueberweisungslimit) {
+                view.ausgabe("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
+            }
+            this.kontostand += betrag;
+            this.transaktionsliste.add(new Transaktion(null, this, betrag, verwendungszweck));
+        } catch (IllegalArgumentException e) {
+            view.ausgabe(e.getMessage());
         }
-        if (betrag > this.ueberweisungslimit) {
-            view.ausgabe("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
-        }
-        this.kontostand += betrag;
-        this.transaktionsliste.add(new Transaktion(null, this, betrag, verwendungszweck));
     }
 
+    /**
+     * Geld von dem Senderkonto abgehoben. Enthält die Kunden Bargeld Logik nicht.
+     * @param betrag # Überweisungsbetrag
+     * @param verwendungszweck # Zweck der Überweisung
+     * @throws IllegalArgumentException # Falls nicht erlaubte Eingaben eintreten.
+     */
     public void ueberweisungAbzug(double betrag, String verwendungszweck) {
-        if (betrag <= 0) {
-            throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + IST_EIN_UNGUELTIGER_BETRAG);
+        try {
+            if (betrag <= 0) {
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + IST_EIN_UNGUELTIGER_BETRAG);
+            }
+            if (betrag > this.ueberweisungslimit) {
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
+            }
+            if (this.kontostand - betrag < this.dispolimit) {
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: Das Dispolimit wurde erreicht.");
+            }
+            this.kontostand -= betrag;
+            transaktionsliste.add(new Transaktion(this, null, -betrag, verwendungszweck));
+        } catch (IllegalArgumentException e) {
+            view.ausgabe(e.getMessage());
         }
-        if (betrag > this.ueberweisungslimit) {
-            throw new IllegalArgumentException("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
-        }
-        if (this.kontostand - betrag < this.dispolimit) {
-            throw new IllegalArgumentException("Überweisung fehlgeschlagen: Das Dispolimit wurde erreicht.");
-        }
-        this.kontostand -= betrag;
-        transaktionsliste.add(new Transaktion(this, null, -betrag, verwendungszweck));
     }
 
+    /**
+     * Hebt Geld vom Konto ab. Ist direkt mit dem Bargeld des Kunden verknüpft.
+     * @param betrag # Abhebungsbetrag
+     * @throws IllegalArgumentException # Falls nicht erlaubte Eingaben eintreten.
+     */
     public void abheben(double betrag) {
         try {
             if (betrag <= 0) {

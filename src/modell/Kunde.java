@@ -1,13 +1,25 @@
 package modell;
 
+/**
+ * @author Alvar Reggio, Joshua Garwenda
+ * @version 1.0
+ */
 public class Kunde {
-
+    // Attribute
     private String vorname;
     private String nachname;
     private String geburtsdatum;
     private String adresse;
     private double bargeld;
 
+    /**
+     * Konstruktor für das Kundenobjekt.
+     * @param vorname # Vorname des Kunden
+     * @param nachname # Nachname des Kunden
+     * @param geburtsdatum # Geburtsdatum des Kunden
+     * @param adresse # Adresse des Kunden
+     * @param bargeld # Bargeld des Kunden
+     */
     public Kunde(String vorname, String nachname, String geburtsdatum, String adresse, double bargeld) {
         this.setVorname(vorname);
         this.setNachname(nachname);
