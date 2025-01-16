@@ -33,12 +33,15 @@ public class Bank {
     public String getBankname() {
         return bankname;
     }
+
     public int getBlz() {
         return blz;
     }
+
     public void setBlz(int blz) {
         this.blz = blz;
     }
+
     public void setBankname(String bankname) {
         this.bankname = bankname;
     }

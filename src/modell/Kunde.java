@@ -15,33 +15,43 @@ public class Kunde {
         this.setAdresse(adresse);
         this.setBargeld(bargeld);
     }
+
     public String getVorname() {
         return vorname;
     }
+
     public String getNachname() {
         return nachname;
     }
+
     public String getGeburtsdatum() {
         return geburtsdatum;
     }
+
     public void setVorname(String vorname) {
         this.vorname = vorname;
     }
+
     public void setNachname(String nachname) {
         this.nachname = nachname;
     }
+
     public void setGeburtsdatum(String geburtsdatum) {
         this.geburtsdatum = geburtsdatum;
     }
+
     public String getAdresse() {
         return adresse;
     }
+
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
+
     public double getBargeld() {
         return bargeld;
     }
+
     public void setBargeld(double bargeld) {
         this.bargeld = bargeld;
     }

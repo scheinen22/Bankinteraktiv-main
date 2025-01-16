@@ -26,39 +26,51 @@ public class Konto {
         this.setDispolimit(dispolimit);
         this.setUeberweisungslimit(ueberweisungslimit);
     }
+
     public int getKontonummer() {
         return kontonummer;
     }
+
     public void setKontonummer(int kontonummer) {
         this.kontonummer = kontonummer;
     }
+
     public double getKontostand() {
         return kontostand;
     }
+
     public void setKontostand(double kontostand) {
         this.kontostand = kontostand;
     }
+
     public Kunde getKunde() {
         return kunde;
     }
+
     public void setKunde(Kunde kunde) {
         this.kunde = kunde;
     }
+
     public Bank getBank() {
         return bank;
     }
+
     public void setBank(Bank bank) {
         this.bank = bank;
     }
+
     public void setDispolimit(double dispolimit) {
         this.dispolimit = dispolimit;
     }
+
     public double getDispolimit() {
         return dispolimit;
     }
+
     public int getUeberweisungslimit() {
         return ueberweisungslimit;
     }
+
     public void setUeberweisungslimit(int ueberweisungslimit) {
         this.ueberweisungslimit = ueberweisungslimit;
     }
