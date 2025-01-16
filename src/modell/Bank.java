@@ -61,9 +61,9 @@ public class Bank {
         }
     }
     
-    public Konto findeKonto(int iban) {
+    public Konto findeKonto(int Kontonummer) {
         for (Konto konto : konten) {
-            if (konto.getIban() == iban) {
+            if (konto.getKontonummer() == Kontonummer) {
                 return konto;
             }
         }
@@ -73,14 +73,14 @@ public class Bank {
     public void ueberweisungInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
-            int ibansender = Integer.parseInt(scanner.nextLine());
-            Konto senderkonto = findeKonto(ibansender);
+            int kontonummersender = Integer.parseInt(scanner.nextLine());
+            Konto senderkonto = findeKonto(kontonummersender);
             if (senderkonto == null) {
                 throw new NullPointerException("Überweisung fehlgeschlagen: Sender existiert nicht.");
             }
             view.ausgabe("Geben Sie die Kontonummer des Empfängers ein: ");
-            int ibanempfaenger = Integer.parseInt(scanner.nextLine());
-            Konto empfaenger = findeKonto(ibanempfaenger);
+            int kontonummerempfaenger = Integer.parseInt(scanner.nextLine());
+            Konto empfaenger = findeKonto(kontonummerempfaenger);
             if (empfaenger == null) {
                 throw new NullPointerException("Überweisung fehlgeschlagen: Empfänger existiert nicht.");
             }
@@ -106,8 +106,8 @@ public class Bank {
     public void einzahlungInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
-            int ibaneingabe = Integer.parseInt(scanner.nextLine());
-            Konto eingabeKonto = findeKonto(ibaneingabe);
+            int kontonummereingabe = Integer.parseInt(scanner.nextLine());
+            Konto eingabeKonto = findeKonto(kontonummereingabe);
             if (eingabeKonto == null) {
                 throw new NullPointerException("Einzahlung fehlgeschlagen: Kontonummer existiert nicht.");
             }
@@ -123,8 +123,8 @@ public class Bank {
     public void abhebenInteraktiv() {
     	try {
             view.ausgabe(GEBEN_KONTO);
-            int ibaneingabe = Integer.parseInt(scanner.nextLine());
-            Konto eingabeKonto = findeKonto(ibaneingabe);
+            int kontonummereingabe = Integer.parseInt(scanner.nextLine());
+            Konto eingabeKonto = findeKonto(kontonummereingabe);
             if (eingabeKonto == null) {
                 throw new NullPointerException("Abhebung fehlgeschlagen: Kontonummer existiert nicht.");
             }
@@ -140,8 +140,8 @@ public class Bank {
     public void kontoInfosInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
-            int ibaneingabe = Integer.parseInt(scanner.nextLine());
-            Konto eingabeKonto = findeKonto(ibaneingabe);
+            int kontonummereingabe = Integer.parseInt(scanner.nextLine());
+            Konto eingabeKonto = findeKonto(kontonummereingabe);
             if (eingabeKonto == null) {
                 throw new NullPointerException("Aktion fehlgeschlagen: Kontonummer existiert nicht.");
             }
@@ -154,8 +154,8 @@ public class Bank {
     public void transaktionenAnzeigenInteraktiv() {
         try {
             view.ausgabe(GEBEN_KONTO);
-            int ibaneingabe = Integer.parseInt(scanner.nextLine());
-            Konto eingabeKonto = findeKonto(ibaneingabe);
+            int kontonummereingabe = Integer.parseInt(scanner.nextLine());
+            Konto eingabeKonto = findeKonto(kontonummereingabe);
             if (eingabeKonto == null) {
                 throw new NullPointerException("Aktion fehlgeschlagen: Kontonummer existiert nicht.");
             }

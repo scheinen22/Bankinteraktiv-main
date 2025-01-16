@@ -36,16 +36,12 @@ public class Transaktion {
 
     public void durchfuehren() {
         try {
-            if (sender != null) {
-                sender.ueberweisungAbzug(betrag, verwendungszweck);
-            }
-            if (empfaenger != null) {
-                empfaenger.ueberweisungEingang(betrag, verwendungszweck);
-            }
+            sender.ueberweisungAbzug(betrag, verwendungszweck);
+            empfaenger.ueberweisungEingang(betrag, verwendungszweck);
             System.out.print("Haben Sie einen Moment Geduld");
             printPunkte();
-            view.ausgabe("\nTransaktion erfolgreich: " + betrag + "€ wurden an das Konto " + empfaenger.getIban() + " überwiesen.");
-        } catch (IllegalArgumentException e) {
+            view.ausgabe("\nTransaktion erfolgreich: " + betrag + "€ wurden an das Konto " + empfaenger.getKontonummer() + " überwiesen.");
+        } catch (IllegalArgumentException | NullPointerException e) {
             view.ausgabe(e.getMessage());
         }
     }
