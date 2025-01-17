@@ -1,4 +1,4 @@
-package modell;
+package model;
 
 /**
  * @author Alvar Reggio, Joshua Garwenda

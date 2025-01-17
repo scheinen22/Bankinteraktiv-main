@@ -2,9 +2,9 @@ package controller;
 
 import java.util.Scanner;
 
-import modell.Bank;
-import modell.Konto;
-import modell.Kunde;
+import model.Bank;
+import model.Konto;
+import model.Kunde;
 import view.View;
 
 /**
