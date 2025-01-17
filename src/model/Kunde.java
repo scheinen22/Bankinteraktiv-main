@@ -1,7 +1,7 @@
 package model;
 
 /**
- * @author Alvar Reggio, Joshua Garwenda
+ * @author Alvar Reggio, Joshua Gawenda
  * @version 1.0
  */
 public class Kunde {
