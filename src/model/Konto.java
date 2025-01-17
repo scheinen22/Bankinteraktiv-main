@@ -126,7 +126,7 @@ public class Konto {
             test2 -= betrag;
             kunde.setBargeld(test2);
             view.ausgabe("Einzahlung erfolgreich: " + betrag + "€ wurde auf dein Konto eingezahlt.");
-            this.transaktionsliste.add(new Transaktion(null, this, betrag, "Einzahlung"));
+            this.transaktionsliste.add(new Transaktion(null, this, +betrag, "Einzahlung"));
         } catch (IllegalArgumentException e) {
             view.ausgabe(e.getMessage());
         }
@@ -147,7 +147,7 @@ public class Konto {
                 view.ausgabe("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
             }
             this.kontostand += betrag;
-            this.transaktionsliste.add(new Transaktion(null, this, betrag, verwendungszweck));
+            this.transaktionsliste.add(new Transaktion(null, this, +betrag, verwendungszweck));
         } catch (IllegalArgumentException e) {
             view.ausgabe(e.getMessage());
         }
