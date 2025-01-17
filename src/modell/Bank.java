@@ -103,8 +103,8 @@ public class Bank {
         try {
             view.ausgabe(GEBEN_KONTO);
             int kontonummersender = Integer.parseInt(scanner.nextLine());
-            Konto senderkonto = findeKonto(kontonummersender);
-            if (senderkonto == null) {
+            Konto sender = findeKonto(kontonummersender);
+            if (sender == null) {
                 throw new NullPointerException("Überweisung fehlgeschlagen: Sender existiert nicht.");
             }
             view.ausgabe("Geben Sie die Kontonummer des Empfängers ein: ");
@@ -125,7 +125,7 @@ public class Bank {
             double betragempfaenger = Double.parseDouble(scanner.nextLine());
             view.ausgabe("Geben Sie den Verwendungszweck ein: ");
             String verwendungszweck = scanner.nextLine();
-            Transaktion t = new Transaktion(senderkonto, empfaenger, betragempfaenger, verwendungszweck);
+            Transaktion t = new Transaktion(sender, empfaenger, betragempfaenger, verwendungszweck);
             t.durchfuehren();
         } catch (IllegalArgumentException | NullPointerException e) {
             view.ausgabe(e.getMessage());
