@@ -139,18 +139,14 @@ public class Konto {
      * @throws IllegalArgumentException # Falls nicht erlaubte Eingaben eintreten.
      */
     public void ueberweisungEingang(double betrag, String verwendungszweck) {
-        try {
             if (betrag <= 0) {
                 throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + IST_EIN_UNGUELTIGER_BETRAG);
             }
             if (betrag > this.ueberweisungslimit) {
-                view.ausgabe("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
+                throw new IllegalArgumentException("Überweisung fehlgeschlagen: Überweisungslimit überschritten.");
             }
             this.kontostand += betrag;
             this.transaktionsliste.add(new Transaktion(null, this, +betrag, verwendungszweck));
-        } catch (IllegalArgumentException e) {
-            view.ausgabe(e.getMessage());
-        }
     }
 
     /**
@@ -160,7 +156,6 @@ public class Konto {
      * @throws IllegalArgumentException # Falls nicht erlaubte Eingaben eintreten.
      */
     public void ueberweisungAbzug(double betrag, String verwendungszweck) {
-        try {
             if (betrag <= 0) {
                 throw new IllegalArgumentException("Überweisung fehlgeschlagen: " + betrag + IST_EIN_UNGUELTIGER_BETRAG);
             }
@@ -172,9 +167,6 @@ public class Konto {
             }
             this.kontostand -= betrag;
             transaktionsliste.add(new Transaktion(this, null, -betrag, verwendungszweck));
-        } catch (IllegalArgumentException e) {
-            view.ausgabe(e.getMessage());
-        }
     }
 
     /**

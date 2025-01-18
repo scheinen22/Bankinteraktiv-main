@@ -51,11 +51,19 @@ public class Transaktion {
      * {@link Konto#ueberweisungEingang(double, String)}
      */
     public void durchfuehren() {
-        sender.ueberweisungAbzug(betrag, verwendungszweck);
-        empfaenger.ueberweisungEingang(betrag, verwendungszweck);
-        System.out.print("Haben Sie einen Moment Geduld");
-        printPunkte();
-        view.ausgabe("\nTransaktion erfolgreich: " + betrag + "€ wurden an das Konto " + empfaenger.getKontonummer() + " überwiesen.");
+        try {
+            if (sender != null) {
+                sender.ueberweisungAbzug(betrag, verwendungszweck);
+            }
+            if (empfaenger != null) {
+                empfaenger.ueberweisungEingang(betrag, verwendungszweck);
+            }
+            System.out.print("Haben Sie einen Moment Geduld");
+            printPunkte();
+            view.ausgabe("\nTransaktion erfolgreich: " + betrag + "€ wurden an das Konto " + empfaenger.getKontonummer() + " überwiesen.");
+        } catch (IllegalArgumentException | NullPointerException e) {
+            view.ausgabe(e.getMessage());
+        }
     }
 
     @Override
