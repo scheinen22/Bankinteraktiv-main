@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Said Halilovic
@@ -23,6 +25,7 @@ public class Transaktion {
     private final String zeitpunkt;
     private final Random rand = new Random();
     private static final Set<Integer> verwendeteTransaktionsnummern = new HashSet<>();
+    private static final Logger LOGGER = Logger.getLogger(Transaktion.class.getName());
     public static final View view = new View();
 
     /**
@@ -54,9 +57,13 @@ public class Transaktion {
         try {
             if (sender != null) {
                 sender.ueberweisungAbzug(betrag, verwendungszweck);
+            } else {
+                throw new NullPointerException("Sender existiert nicht.");
             }
             if (empfaenger != null) {
                 empfaenger.ueberweisungEingang(betrag, verwendungszweck);
+            } else {
+                throw new NullPointerException("Empfänger existiert nicht.");
             }
             System.out.print("Haben Sie einen Moment Geduld");
             printPunkte();
@@ -104,7 +111,7 @@ public class Transaktion {
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Thread wurde unterbrochen", e);
                 Thread.currentThread().interrupt();
             }
         }

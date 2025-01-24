@@ -150,7 +150,7 @@ public class Bank {
             view.ausgabe("Geben Sie den gewünschten Betrag ein: ");
             double betragempfaenger = Double.parseDouble(scanner.nextLine());
             eingabeKonto.einzahlen(betragempfaenger);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             view.ausgabe(e.getMessage());
         }
     }
@@ -173,7 +173,7 @@ public class Bank {
             double betragempfaenger = Double.parseDouble(scanner.nextLine());
             eingabeKonto.abheben(betragempfaenger);
             view.ausgabe("Aktuelles Bargeld: " + eingabeKonto.getKunde().getBargeld());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             view.ausgabe(e.getMessage());
         }
     }
@@ -195,7 +195,7 @@ public class Bank {
                 throw new NullPointerException("Aktion fehlgeschlagen: Kontonummer existiert nicht.");
             }
             view.ausgabe(eingabeKonto.getBank().toString() + eingabeKonto + eingabeKonto.getKunde().toString());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             view.ausgabe(e.getMessage());
         }
     }
@@ -215,7 +215,7 @@ public class Bank {
                 throw new NullPointerException("Aktion fehlgeschlagen: Kontonummer existiert nicht.");
             }
             eingabeKonto.zeigeTransaktionen();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             view.ausgabe(e.getMessage());
         }
     }
