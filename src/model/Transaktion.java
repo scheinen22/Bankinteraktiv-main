@@ -82,7 +82,7 @@ public class Transaktion {
      * Generiert eine zufällige Transaktionsnummer bis 10000 und stellt sicher, dass diese nicht doppelt vorhanden ist.
      * @return int
      */
-    public int generiereTransaktionsnummer() {
+    private int generiereTransaktionsnummer() {
         int transaktionsnummerGeneriert;
         do {
             transaktionsnummerGeneriert = rand.nextInt(10000);
@@ -96,7 +96,7 @@ public class Transaktion {
      * Formatiert den Zeitpunkt in eine lesbare Form.
      * @return String
      */
-    public String formatiereZeitpunkt() {
+    private String formatiereZeitpunkt() {
         LocalDateTime localDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd. LLLL yyyy HH:mm:ss");
         return localDateTime.format(formatter);
@@ -105,7 +105,7 @@ public class Transaktion {
     /**
      * Gibt drei Punkte in einem Abstand von drei Sekunden aus.
      */
-    public void printPunkte() {
+    private void printPunkte() {
         for(int i = 0; i <= 2; i++) {
             System.out.print(".");
             try {
